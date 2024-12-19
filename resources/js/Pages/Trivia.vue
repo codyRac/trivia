@@ -52,7 +52,7 @@ const enter = async () => {
 
 <template>
     <Head title="Welcome" />
-    <div class="bg-gray-50 text-black/50 bg-black text-white">
+    <div class=" bg-black text-white">
 
         <div
             class="flex min-h-screen
