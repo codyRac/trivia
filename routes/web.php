@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\{ProfileController, WelcomeController, TriviaController, ServiceController, CreditController};
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -13,6 +13,16 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+
+Route::post('/start', [WelcomeController::class, 'start'])->name('start');
+Route::get('/trivia',[TriviaController::class, 'index'])->name('trivia');
+Route::post('/trivia_answer',[TriviaController::class, 'answered'])->name('answered');
+Route::post('/use-credits',[CreditController::class, 'useCredits'])->name('useCredits');
+
+
+Route::get('/redeem',[ServiceController::class, 'redeem'])->name('redeem');
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
