@@ -21,10 +21,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+        Gate::define('viewPulse', static function (?User $user) {
+            return true;  // Replace with your actual authorization logic
+        });
+        
         Vite::prefetch(concurrency: 3);
 
-        Gate::define('viewPulse', function (User $user) {
-            return true;
-        });
+
     }
 }
