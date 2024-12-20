@@ -1,6 +1,8 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+
 </script>
 
 <template>
@@ -20,8 +22,14 @@ import { Head } from '@inertiajs/vue3';
                 <div
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800"
                 >
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        You're logged in!
+                    <div class="p-6 text-gray-900 grid grid-cols-2 gap-4 dark:text-gray-100">
+                        <a href="/admin" class="w-full">
+                            <secondary-button class="w-full">Admin</secondary-button>
+                        </a>
+                        <a href="/pulse" class="w-full">
+                            <secondary-button class="w-full">Pulse</secondary-button>
+                        </a>
+
                     </div>
                 </div>
             </div>
