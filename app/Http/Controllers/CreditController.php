@@ -33,7 +33,12 @@ class CreditController extends Controller
 
     // Deduct credits
     $userCredits->credits -= $service->cost;
-    $userCredits->save();
+    $userCredits->spent += $service->cost;
+    $userCredits->update();
+
+    $service->times_used++;
+    $service->cost += 15;
+    $service->update();
 
     return response()->json([
         'success' => true,

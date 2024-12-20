@@ -29,7 +29,6 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
                         <a href="/pulse" class="w-full">
                             <secondary-button class="w-full">Pulse</secondary-button>
                         </a>
-
                     </div>
                 </div>
             </div>

@@ -15,25 +15,28 @@ const use = async (serviceId, cost) => {
     // Check if user has enough credits
     if (props.credits.credits < cost) {
         toast.error('Not enough credits!', {
+                autoClose: 2000,
+            });
+        return;
+    }
+    if(confirm('Are you user you want to redeem?')){
+        try {
+            const response = await axios.post('/use-credits', { service_id: serviceId });
+            if (response.data.success) {
+                toast.success(response.data.message || 'Service redeemed successfully!', {
                     autoClose: 2000,
-                });        return;
-            }
-    try {
-        const response = await axios.post('/use-credits', { service_id: serviceId });
-        if (response.data.success) {
-            toast.success(response.data.message || 'Service redeemed successfully!', {
+                });
+                props.credits.credits = response.data.remaining_credits; // Update credits dynamically
+            } else {
+                toast.error(response.data.message || 'Failed to redeem service.', {
+                    autoClose: 2000,
+                });
+        }
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'An error occurred. Please try again.', {
                 autoClose: 2000,
             });
-            props.credits.credits = response.data.remaining_credits; // Update credits dynamically
-        } else {
-            toast.error(response.data.message || 'Failed to redeem service.', {
-                autoClose: 2000,
-            });
-       }
-    } catch (error) {
-        toast.error(error.response?.data?.message || 'An error occurred. Please try again.', {
-            autoClose: 2000,
-        });
+        }
     }
 };
 
@@ -143,7 +146,10 @@ onMounted(() => {
                             <div class="text-xs">
                                 {{ service.category }}
                             </div>
-                            <SecondaryButton class="mt-3" @click="use(service.id,service.cost );">{{ service.cost }} Credits</SecondaryButton>
+                            <SecondaryButton v-if="credits.credits >= service.cost" class="mt-3" @click="use(service.id,service.cost );">{{ service.cost }} Credits</SecondaryButton>
+                            <div class="mt-3 rounded bg-red-500" v-else>{{ service.cost }} Credits</div>
+                            <div class="text-xs mt-3">Times Reedem {{ service.times_used }}</div>
+
                         </div>
                     </div>
                 </main>

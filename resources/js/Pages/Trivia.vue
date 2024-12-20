@@ -13,6 +13,7 @@ const props = defineProps({
     canAnswer: Boolean // Assume trivia has properties like question and answers
 });
 const credits = ref(props.credits); // Make credits reactive
+const canAnswer = ref(props.canAnswer); // Make credits reactive
 
 
 const selectedAnswer = ref(null);
@@ -28,7 +29,9 @@ const enter = async () => {
         const response = await axios.post('/trivia_answer',{
                 trivia_id: props.trivia.id, // Send only trivia ID
                 answer: selectedAnswer.value
+
             });
+            canAnswer.value = false
 
             // Update the credits object dynamically
         if (response.data.credits) {
