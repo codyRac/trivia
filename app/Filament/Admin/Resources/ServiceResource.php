@@ -52,6 +52,8 @@ class ServiceResource extends Resource
                 Tables\Columns\TextColumn::make('cost')
                     ->money()
                     ->sortable(),
+                    Tables\Columns\TextColumn::make('times_used')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

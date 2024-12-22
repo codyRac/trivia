@@ -31,9 +31,8 @@ class ServiceController extends Controller
 
         $credits = Credit::find(1); // Assuming there's only one credit record
 
-        $filters = $request->only(['category', 'min_cost', 'max_cost', 'search']);
+        // $filters = $request->only(['category', 'min_cost', 'max_cost', 'search']);
 
-        // $services = FilterServicesPipeline::apply(Service::query(), $filters)->get();
         $pipes = [
             new SearchFilter($request->get('search')),
             new CategoryFilter($request->get('category')),

@@ -82,10 +82,10 @@ onMounted(() => {
             class="flex min-h-screen
             flex-col
 
-            selection:bg-[#FF2D20]
+
             selection:text-white"
         >
-            <div class="relative w-full  px-6 ">
+            <div class="relative w-full bg-gradient-to-b from-gray-900 to-blue-700 px-6 ">
                 <main class="pt-10">
                     <div class="grid gap-6 text-center lg:grid-cols-1 lg:gap-8">
                         <div class="rounded bg-green-900 text-3xl p-3">
@@ -134,7 +134,7 @@ onMounted(() => {
                         text-center grid-cols-2
                         lg:grid-cols-5 my-4 lg:gap-8">
                         <div :key="service.id" class="rounded border p-3
-                         bg-gradient-to-b from-green-800 to-green-500
+                         bg-gradient-to-b from-green-900 to-green-800
 
                         " v-for="service in services">
                             <div class="text-xl">

@@ -41,6 +41,9 @@ class TriviaResource extends Resource
                 Forms\Components\TextInput::make('wrong_3')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Toggle::make('used'),
+                Forms\Components\DateTimePicker::make('used_on')
+                ->timezone('America/Los_Angeles')
             ]);
     }
 
@@ -49,7 +52,8 @@ class TriviaResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('category')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('answer')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('wrong_1')
@@ -58,6 +62,15 @@ class TriviaResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('wrong_3')
                     ->searchable(),
+                Tables\Columns\IconColumn::make('used')
+                ->boolean()
+                ->sortable(),
+                Tables\Columns\TextColumn::make('used_on')
+                ->dateTime()
+                ->since()
+                ->sortable()
+                ->searchable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
