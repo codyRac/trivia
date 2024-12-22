@@ -36,6 +36,8 @@ class ServiceResource extends Resource
                     ->numeric()
                     ->default(10)
                     ->prefix('$'),
+                    Forms\Components\TextInput::make('times_used')
+                    ->required(),
             ]);
     }
 
