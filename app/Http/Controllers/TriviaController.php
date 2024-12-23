@@ -72,6 +72,8 @@ class TriviaController extends Controller
 
         // Check if the provided answer matches the correct answer
         $message = 'Wrong answer.';
+        $result = 'wrong';
+
         $credits = Credit::find(1); // Assuming there's only one credit record
 
 
@@ -81,10 +83,12 @@ class TriviaController extends Controller
             $credits->credits +=10;
             $credits->earned +=10;
             $credits->update();
+            $result = 'right';
         }
 
         $trivia->used = 1;
         $trivia->used_on = Carbon::now();
+        $trivia->result = $result;
         $trivia->update();
 
         // Send the response back with the message and updated credits
@@ -93,14 +97,7 @@ class TriviaController extends Controller
             'credits' => $credits->credits,
             'earned' => $credits->earned,
         ], 200);
-
-
-
-
     }
-
-
-
     /**
      * Show the form for creating a new resource.
      */

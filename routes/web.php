@@ -16,6 +16,8 @@ Route::get('/', function () {
 
 
 Route::post('/start', [WelcomeController::class, 'start'])->name('start');
+Route::get('/holding', [WelcomeController::class, 'holding'])->name('holding');
+
 Route::get('/trivia',[TriviaController::class, 'index'])->name('trivia');
 Route::post('/trivia_answer',[TriviaController::class, 'answered'])->name('answered');
 Route::post('/use-credits',[CreditController::class, 'useCredits'])->name('useCredits');

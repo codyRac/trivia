@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Credit;
 
 class WelcomeController extends Controller
 {
@@ -28,6 +29,20 @@ class WelcomeController extends Controller
 
     }
 
+    public function holding()
+    {
 
-    
+        $credits =  Credit::find(1);
+
+
+        return Inertia::render('Holding', [
+            'credits'=> $credits,
+
+        ]);
+    }
+
+
+
+
+
 }

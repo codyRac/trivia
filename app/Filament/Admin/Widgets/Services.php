@@ -28,15 +28,13 @@ class Services extends BaseWidget
 
         return [
             Stat::make('Most Used Servcies:', $times_used)
-                ->description($title),
+                ->icon('heroicon-m-arrow-trending-up')
+                ->description($title)
+                ->color('warning'),
             Stat::make('Unused Services', $left)
-                ->descriptionIcon('heroicon-m-question-mark-circle'),
+                ->icon('heroicon-m-bolt-slash'),
             Stat::make('Number of Used Servcies', $done)
-                ->descriptionIcon('heroicon-m-question-mark-circle'),
-
-
-
-
+                ->icon('heroicon-m-bolt'),
        ];
     }
 }

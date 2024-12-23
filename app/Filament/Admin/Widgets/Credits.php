@@ -16,15 +16,15 @@ class Credits extends BaseWidget
         return [
             Stat::make('Credits', $credit->credits)
                 ->description('Credits Left')
-                ->descriptionIcon('heroicon-m-credit-card')
+                ->icon('heroicon-m-credit-card')
                 ->color('success'),
             Stat::make('Spent', $credit->spent)
                 ->description('Credits Spent')
-                ->descriptionIcon('heroicon-m-currency-dollar')
+                ->icon('heroicon-m-currency-dollar')
                 ->color('danger'),
             Stat::make('Earned', $credit->earned)
                 ->description('Credits Earned')
-                ->descriptionIcon('heroicon-m-banknotes') ->color('info'),
+                ->icon('heroicon-m-banknotes') ->color('info'),
 
        ];
     }

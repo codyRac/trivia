@@ -5,6 +5,7 @@ import { ref } from 'vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import axios from 'axios';
 import { Inertia } from '@inertiajs/inertia';
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 
 const password = ref(''); // Bind the password input
 
@@ -35,7 +36,7 @@ const enter = async () => {
     try {
         const response = await axios.post('/start', { password: password.value });
         // Redirect to the Trivia page using Inertia
-        Inertia.visit(route('trivia'));
+        Inertia.visit(route('holding'));
     } catch (error) {
         alert(error.response?.data?.message || 'An error occurred. Please try again.'); // Handle error message
     }
@@ -58,6 +59,7 @@ const enter = async () => {
         >
             <div class="relative w-full max-w-2xl px-6 ">
                 <main class="mt-6">
+                    <ApplicationLogo class="mx-auto"></ApplicationLogo>
 
                     <p class="bg-green-700 p-3 rounded-xl text-white my-2">To use your gift you must solve the trivia below</p>
 
@@ -88,7 +90,8 @@ const enter = async () => {
                     <PrimaryButton @click="nextSection(4)">Next</PrimaryButton>
                 </div>
                 <div v-if="showSection5">
-                    <p class="bg-green-700 p-3 rounded-xl text-white my-2">Hint: Change the order to make sense </p>
+                    <p class="bg-green-700 p-3 rounded-xl text-white my-2">
+                        You have everything you need now <br>Hint: Change the order to make sense </p>
                 </div>
                 </main>
                  <header

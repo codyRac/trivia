@@ -14,7 +14,7 @@ class CreditUsed extends Model
 
     public function service()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Service::class);
     }
 
 }
