@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Credit, Service};
+use App\Models\{Credit, Service, CreditUsed};
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Carbon\Carbon;
 
 class CreditController extends Controller
 {
@@ -31,11 +32,19 @@ class CreditController extends Controller
         return response()->json(['success' => false, 'message' => 'Not enough credits.'], 400);
     }
 
+    $cost =$service->cost;
     // Deduct credits
     $userCredits->credits -= $service->cost;
     $userCredits->spent += $service->cost;
     $userCredits->update();
+    CreditUsed::create(
+        [
+            'service_id'=>$service->id,
+            'credits'=> $cost,
+            'date_used'=> Carbon::now()
 
+        ]
+    );
     $service->times_used++;
     $service->cost += 15;
     $service->update();
