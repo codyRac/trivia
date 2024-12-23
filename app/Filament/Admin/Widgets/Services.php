@@ -16,11 +16,24 @@ class Services extends BaseWidget
         $left = Service::where('times_used',0)->count();
         $done = Service::where('times_used','>=', 1)->count();
 
+
+
+        $mostUsedService = Service::where('times_used', '>=', 1)
+            ->orderBy('times_used', 'desc')
+            ->first();
+
+            // Define default values for "Most Used Service" stat
+        $title = $mostUsedService?->title ?? 'None'; // Fallback to 'None' if no service found
+        $times_used = $mostUsedService?->times_used ?? 0;
+
         return [
+            Stat::make('Most Used Servcies:', $times_used)
+                ->description($title),
             Stat::make('Unused Services', $left)
                 ->descriptionIcon('heroicon-m-question-mark-circle'),
             Stat::make('Number of Used Servcies', $done)
                 ->descriptionIcon('heroicon-m-question-mark-circle'),
+
 
 
 
