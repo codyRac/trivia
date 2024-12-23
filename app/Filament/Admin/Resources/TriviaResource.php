@@ -86,6 +86,19 @@ class TriviaResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\Filter::make('used')
+                ->label('Already Used')
+                ->query(fn (Builder $query): Builder => $query->where('used', true)),
+
+                Tables\Filters\SelectFilter::make('category')
+                ->multiple()
+                ->options([
+                    'The Office' => 'The Office',
+                    'Red Dead Redemption 2' => 'Red Dead Redemption 2',
+                    'Half Moon Run' => 'Half Moon Run',
+                    'Taylor Swift'=> 'Taylor Swift',
+
+                ])
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
