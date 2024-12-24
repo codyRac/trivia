@@ -2,16 +2,17 @@
 
 namespace App\Filament\Admin\Widgets;
 
+use App\Models\Trivia;
 use Filament\Widgets\ChartWidget;
-use App\Models\CreditUsed;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
-class ServicesSpentRecently extends ChartWidget
+class AnswersRecently extends ChartWidget
 {
-    protected static ?string $heading = 'Services Used';
-    protected static ?int $sort = 2;
+    protected static ?string $heading = 'Answer Results';
 
-    protected static string $color = 'info';
+    protected static ?int $sort = 2;
+    protected static string $color = 'success';
+
 
     protected function getFilters(): ?array
     {
@@ -27,6 +28,7 @@ class ServicesSpentRecently extends ChartWidget
 
     protected function getData(): array
     {
+
         $filter = $this->filter ?? 'this_month';
         $now = Carbon::now();
 
@@ -66,42 +68,23 @@ class ServicesSpentRecently extends ChartWidget
                 break;
         }
 
-        // Fetch data grouped by weeks or days based on the filter
-        $servicesUsed = CreditUsed::whereBetween('date_used', [$start, $end])
-            ->selectRaw("DATE(date_used) as date, COUNT(*) as count")
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get()
-            ->pluck('count', 'date')
-            ->toArray();
+        $results = Trivia::whereBetween('used_on', [$start, $end])
+        ->selectRaw("result, COUNT(*) as count")
+        ->groupBy('result')
+        ->pluck('count', 'result')
+        ->toArray();
 
 
-        // Debugging: Check fetched data
-        // dd($start);
-
-        // Generate labels and data
-        $labels = [];
-        $data = [];
-        $current = $start->copy();
-
-        while ($current <= $end) {
-            $label = $current->format('M d');
-            $dateKey = $current->toDateString();
-
-            $labels[] = $label;
-            $data[] = $servicesUsed[$dateKey] ?? 0;
-
-            $current->addDay(); // Iterate day by day
-        }
-
+        $rightCount = $results['right'] ?? 0;
+        $wrongCount = $results['wrong'] ?? 0;
         return [
             'datasets' => [
                 [
-                    'label' => 'Services Used',
-                    'data' => $data,
+                    'label' => 'Results',
+                    'data' => [$rightCount, $wrongCount],
                 ],
             ],
-            'labels' => $labels,
+            'labels' => ['Right', 'Wrong'],
         ];
     }
 

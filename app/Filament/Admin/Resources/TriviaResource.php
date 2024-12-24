@@ -17,7 +17,7 @@ class TriviaResource extends Resource
 {
     protected static ?string $model = Trivia::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-light-bulb';
 
     public static function form(Form $form): Form
     {
@@ -41,6 +41,10 @@ class TriviaResource extends Resource
                 Forms\Components\TextInput::make('wrong_3')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('result')->options([
+                        'right' => 'Right',
+                        'wrong' => 'Wrong',
+                    ]),
                 Forms\Components\Toggle::make('used'),
                 Forms\Components\DateTimePicker::make('used_on')
                 ->timezone('America/Los_Angeles')
@@ -70,6 +74,9 @@ class TriviaResource extends Resource
                 ->since()
                 ->sortable()
                 ->searchable(),
+                Tables\Columns\TextColumn::make('result')
+                    ->searchable()
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -85,10 +92,15 @@ class TriviaResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
                 Tables\Filters\Filter::make('used')
                 ->label('Already Used')
                 ->query(fn (Builder $query): Builder => $query->where('used', true)),
+                Tables\Filters\SelectFilter::make('result')
+                ->multiple()
+                ->options([
+                    'right' => 'Right',
+                    'wrong' => 'Wrong',
+                ]),
 
                 Tables\Filters\SelectFilter::make('category')
                 ->multiple()
@@ -98,7 +110,10 @@ class TriviaResource extends Resource
                     'Half Moon Run' => 'Half Moon Run',
                     'Taylor Swift'=> 'Taylor Swift',
 
-                ])
+                ]),
+                Tables\Filters\TrashedFilter::make(),
+
+
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

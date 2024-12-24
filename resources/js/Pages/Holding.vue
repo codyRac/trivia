@@ -79,7 +79,7 @@ const enter = async () => {
                     </div>
 
                     <Link :href="route('trivia')" class="mt-4" >
-                        <p class="bg-green-700 p-3 text-3xl text-center rounded-xl text-white my-2">
+                        <p class="bg-green-700 p-3 text-3xl text-center rounded-xl text-white my-4">
                             Daily Trivia<br>
                             <span class="text-xs">Ready!</span>
                         </p>
