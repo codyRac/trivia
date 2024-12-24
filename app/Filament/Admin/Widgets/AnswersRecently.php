@@ -80,11 +80,18 @@ class AnswersRecently extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Results',
-                    'data' => [$rightCount, $wrongCount],
+                    'label' => 'Right',
+                    'data' => [$rightCount],
+                    'borderColor' => '#9BD0F5',
+                ],
+                [
+                    'label' => 'Wrong',
+                    'data' => [ $wrongCount],
+                    'borderColor' => '#fc030f',
+
                 ],
             ],
-            'labels' => ['Right', 'Wrong'],
+            'labels' => ['Results'],
         ];
     }
 

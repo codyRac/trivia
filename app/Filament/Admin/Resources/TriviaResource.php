@@ -18,7 +18,10 @@ class TriviaResource extends Resource
     protected static ?string $model = Trivia::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-light-bulb';
-
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
     public static function form(Form $form): Form
     {
         return $form
