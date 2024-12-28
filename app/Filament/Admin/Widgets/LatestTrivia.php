@@ -16,8 +16,14 @@ class LatestTrivia extends BaseWidget
 
     public function table(Table $table): Table
     {
+
+        $query = Trivia::query()
+        ->whereNotNull('result')
+        ->orderBy('used_on', 'desc');
+        
         return $table
-            ->query(TriviaResource::getEloquentQuery())
+            ->query($query)
+
             ->defaultPaginationPageOption(5)
             ->defaultSort('used_on', 'desc')
             ->columns([
