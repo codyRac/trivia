@@ -46,7 +46,7 @@ class CreditController extends Controller
         ]
     );
     $service->times_used++;
-    $service->cost += 15;
+    $service->cost = ($service->cost*.25 )+ $service->cost;
     $service->update();
 
     return response()->json([

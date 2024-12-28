@@ -30,7 +30,8 @@ class CreditUsedResource extends Resource
             ->schema([
                 Forms\Components\Select::make('service_id')
                     ->required()
-                    ->relationship('service','title')->searchable(),
+                    ->relationship('service','title')
+                    ->searchable(),
                 Forms\Components\TextInput::make('credits')
                     ->required()
                     ->numeric()
