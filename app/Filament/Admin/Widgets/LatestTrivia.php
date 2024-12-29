@@ -20,9 +20,8 @@ class LatestTrivia extends BaseWidget
         $query = Trivia::query()
         ->whereNotNull('result')
         ->orderBy('used_on', 'desc');
-        
         return $table
-            ->query($query)
+            ->query($query )
 
             ->defaultPaginationPageOption(5)
             ->defaultSort('used_on', 'desc')
@@ -30,6 +29,10 @@ class LatestTrivia extends BaseWidget
                 Tables\Columns\TextColumn::make('category')
                     ->searchable()
                     ->sortable(),
+                    Tables\Columns\TextColumn::make('question')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('answer')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('wrong_1')
