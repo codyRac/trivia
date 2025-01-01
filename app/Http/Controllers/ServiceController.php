@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\{Service, Credit};
 use App\Pipes\Filters\CategoryFilter;
+use App\Pipes\Filters\FavoriteFilter;
 use App\Pipes\Filters\MaxCostFilter;
 use App\Pipes\Filters\MinCostFilter;
 use App\Pipes\Filters\SearchFilter;
@@ -38,6 +39,8 @@ class ServiceController extends Controller
             new CategoryFilter($request->get('category')),
             new MinCostFilter($request->get('min_cost')),
             new MaxCostFilter($request->get('max_cost')),
+            new FavoriteFilter($request->get('fav')),
+
         ];
         $services = Pipeline::send(Service::query())
         ->through($pipes)
@@ -51,6 +54,20 @@ class ServiceController extends Controller
 
     }
 
+    public function fav(Request $request){
+
+        $service = Service::find($request->service_id);
+
+        $service->favorite = $request->favorite;
+
+        $service->update();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Service updated successfully!',
+        ], 200);
+
+    }
 
 
     public function table(Request $request)

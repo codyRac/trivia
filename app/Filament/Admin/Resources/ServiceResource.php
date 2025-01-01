@@ -62,6 +62,12 @@ class ServiceResource extends Resource
                     ->sortable(),
                     Tables\Columns\TextColumn::make('times_used')
                     ->sortable(),
+                    Tables\Columns\TextColumn::make('fulfilled')
+                    ->sortable(),
+                    
+                    Tables\Columns\IconColumn::make('favorite')
+                ->boolean()
+                ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

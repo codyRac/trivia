@@ -24,6 +24,7 @@ Route::post('/use-credits',[CreditController::class, 'useCredits'])->name('useCr
 
 
 Route::get('/redeem',[ServiceController::class, 'redeem'])->name('redeem');
+Route::post('/fav',[ServiceController::class, 'fav'])->name('fav');
 
 
 Route::get('/dashboard', function () {
