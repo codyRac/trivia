@@ -29,20 +29,24 @@ class ServiceResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('category')
+
+                Forms\Components\TextInput::make('title')
+                    ->required()
+                    ->maxLength(255),
+                    Forms\Components\TextInput::make('category')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('duration')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('title')
-                    ->required()
-                    ->maxLength(255),
+
                 Forms\Components\TextInput::make('cost')
                     ->required()
                     ->numeric()
                     ->default(10)
                     ->prefix('$'),
-                    Forms\Components\TextInput::make('times_used')
+                Forms\Components\TextInput::make('times_used')
+                    ->required(),
+                    Forms\Components\TextInput::make('fulfilled')
                     ->required(),
             ]);
     }
@@ -64,7 +68,7 @@ class ServiceResource extends Resource
                     ->sortable(),
                     Tables\Columns\TextColumn::make('fulfilled')
                     ->sortable(),
-                    
+
                     Tables\Columns\IconColumn::make('favorite')
                 ->boolean()
                 ->sortable(),
