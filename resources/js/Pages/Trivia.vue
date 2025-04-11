@@ -14,7 +14,9 @@ const props = defineProps({
 });
 const credits = ref(props.credits); // Make credits reactive
 const canAnswer = ref(props.canAnswer); // Make credits reactive
+const showAnswer = ref(false); // Make credits reactive
 
+const answer = ref(''); // Make credits reactive
 
 const selectedAnswer = ref(null);
 const enter = async () => {
@@ -29,9 +31,13 @@ const enter = async () => {
         const response = await axios.post('/trivia_answer',{
                 trivia_id: props.trivia.id, // Send only trivia ID
                 answer: selectedAnswer.value
-
             });
             canAnswer.value = false
+            showAnswer.value = true;
+            answer.value =  response.data.answer
+            console.log('made it')
+            console.log('made itshowAnswer.value', showAnswer.value)
+            console.log('made it answer', answer.value)
 
             // Update the credits object dynamically
         if (response.data.credits) {
@@ -77,11 +83,15 @@ const enter = async () => {
                             </Link>
                         </div>
                     </div>
+
                     <div v-if="canAnswer" class="grid gap-6 text-center lg:grid-cols-1 my-4 lg:gap-8">
                         <div class="text-4xl">Todays Trivia</div>
                         <div class="text-2xl"> {{ trivia.question }}
                             <div class="text-xl"> {{ trivia.category }}</div>
                         </div>
+
+
+
                         <div class="border p-6 rounded">
                             <p class="mb-4">Please select an answer:</p>
                             <div v-for="answer in trivia.answers" :key="answer.id" class="flex items-center mb-2">
@@ -101,6 +111,8 @@ const enter = async () => {
                     </div>
                     <div v-else class="text-6xl gap-6 my-3 text-center ">
                         You are done for today!
+                        <div class="text-2xl text-center" v-if="showAnswer"> Answer: {{ answer }}
+                        </div>
                     </div>
                 </main>
 

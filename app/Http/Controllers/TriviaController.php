@@ -96,6 +96,8 @@ class TriviaController extends Controller
             'message' => $message,
             'credits' => $credits->credits,
             'earned' => $credits->earned,
+            'answer' => $trivia->answer,
+
         ], 200);
     }
     /**
