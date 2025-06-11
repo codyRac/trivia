@@ -25,7 +25,7 @@ class StatsOverview extends BaseWidget
                 ->icon('heroicon-m-clipboard-document-list'),
             Stat::make('Triva Completed', $done)
                 ->icon('heroicon-m-clipboard-document-check'),
-            Stat::make('Days before out',$left- $done)
+            Stat::make('Days before out',$days)
                 ->icon('heroicon-m-clock')
                 ->description($description)
                 ->descriptionIcon('heroicon-m-shield-exclamation')->color('danger'),
