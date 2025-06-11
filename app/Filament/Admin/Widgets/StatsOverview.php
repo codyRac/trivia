@@ -15,9 +15,8 @@ class StatsOverview extends BaseWidget
     {
         $left = Trivia::where('used',0)->count();
         $done = Trivia::where('used',1)->count();
-        $days = $left- $done;
         $description = null;
-        if($days <= 15){
+        if($left <= 15){
             $description = 'Running out';
         }
         return [
@@ -25,7 +24,7 @@ class StatsOverview extends BaseWidget
                 ->icon('heroicon-m-clipboard-document-list'),
             Stat::make('Triva Completed', $done)
                 ->icon('heroicon-m-clipboard-document-check'),
-            Stat::make('Days before out',$days)
+            Stat::make('Days before out',$left)
                 ->icon('heroicon-m-clock')
                 ->description($description)
                 ->descriptionIcon('heroicon-m-shield-exclamation')->color('danger'),
