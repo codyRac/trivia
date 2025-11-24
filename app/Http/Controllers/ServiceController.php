@@ -179,6 +179,9 @@ class ServiceController extends Controller
     {
          $service->delete();
 
-        return response()->json(['message' => 'Service Deleted'], 201);
+        return response()->json([
+            'success' => true,
+            'message' => 'Service removed successfully!'
+        ], 200);
     }
 }

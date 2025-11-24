@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\{ProfileController, WelcomeController,
     TriviaController, ServiceController, CreditController,
-     MusicController, EmojiController};
+     MusicController, EmojiController, SuggestionController};
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,6 +32,8 @@ Route::post('/emoji/answer', [EmojiController::class, 'answer'])->name('emoji.an
 
 Route::get('/redeem',[ServiceController::class, 'redeem'])->name('redeem');
 Route::post('/fav',[ServiceController::class, 'fav'])->name('fav');
+Route::delete('/service/{service}',[ServiceController::class, 'destroy'])->name('service.destroy');
+Route::post('/suggestion',[SuggestionController::class, 'store'])->name('suggestion.store');
 
 
 Route::get('/dashboard', function () {

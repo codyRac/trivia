@@ -23,18 +23,25 @@ class EmojiController extends Controller
         $todayStartUTC = $todayStartLA->copy()->setTimezone('UTC');
 
         // Check if puzzle has already been answered today
-        // $hasAnsweredToday = EmojiMoviePuzzle::whereNull('used')->exists();
+        $hasAnsweredToday = EmojiMoviePuzzle::where('used', 1)
+            ->where('updated_at', '>=', $todayStartUTC)
+            ->exists();
 
-        // if ($hasAnsweredToday) {
-        //     return Inertia::render('Emoji', [
-        //         'credits' => $credits,
-        //         'canAnswer' => false,
-        //         'puzzle' => null,
-        //     ]);
-        // }
+        if ($hasAnsweredToday) {
+            return Inertia::render('Emoji', [
+                'credits' => $credits,
+                'canAnswer' => false,
+                'puzzle' => null,
+            ]);
+        }
 
         // Get a random puzzle that hasn't been used today
-        $puzzle = EmojiMoviePuzzle::whereNull('used')
+        $puzzle = EmojiMoviePuzzle::where(function($query) use ($todayStartUTC) {
+                $query->whereNull('used')
+                    ->orWhere('used', 0)
+                    ->orWhere('updated_at', '<', $todayStartUTC);
+            })
+            ->inRandomOrder()
             ->first();
 
         if (!$puzzle) {

@@ -11,6 +11,8 @@ const props = defineProps({
     credits: Object,
     trivia: Object,
     services: Object,
+    triviaCompleted: Boolean,
+    emojiCompleted: Boolean,
     canAnswer: Boolean // Assume trivia has properties like question and answers
 });
 const credits = ref(props.credits); // Make credits reactive
@@ -61,7 +63,7 @@ const enter = async () => {
             <div class="relative w-full px-6 py-10">
                 <main class="max-w-6xl mx-auto">
                     <!-- Header -->
-                    <div class="text-center mb-10">
+                    <div class="text-center mb-10 animate-fade-in-up">
                         <h1 class="text-6xl font-bold mb-3 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
                             Welcome Back! 🎉
                         </h1>
@@ -69,7 +71,7 @@ const enter = async () => {
                     </div>
 
                     <!-- Credits Card -->
-                    <div class="mb-12">
+                    <div class="mb-12 animate-slide-up" style="animation-delay: 0.1s;">
                         <div class="bg-gradient-to-br from-green-600 to-green-800 rounded-3xl p-8 shadow-2xl border border-green-500/30 transform hover:scale-105 transition-all duration-300 relative overflow-hidden">
                             <!-- Decorative circles -->
                             <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20"></div>
@@ -88,12 +90,12 @@ const enter = async () => {
                     </div>
 
                     <!-- Activity Cards Grid -->
-                    <div class="mb-12">
+                    <div class="mb-12 animate-slide-up" style="animation-delay: 0.2s;">
                         <h2 class="text-3xl font-bold mb-6 text-center">Daily Activities</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <!-- Trivia Card -->
                             <Link :href="route('trivia')">
-                                <div class="group bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-8 shadow-xl border border-blue-500/30 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                                <div class="group bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-8 shadow-xl border border-blue-500/30 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer relative overflow-hidden animate-slide-up" style="animation-delay: 0.3s;">
                                     <div class="absolute top-0 right-0 text-9xl opacity-10 transform rotate-12">
                                         🧠
                                     </div>
@@ -101,8 +103,11 @@ const enter = async () => {
                                         <div class="text-5xl mb-4">🧠</div>
                                         <h3 class="text-3xl font-bold mb-2">Daily Trivia</h3>
                                         <p class="text-blue-200 mb-4">Test your knowledge</p>
-                                        <span class="inline-block bg-green-400 text-green-900 px-4 py-2 rounded-full text-sm font-bold">
-                                            ✓ Ready!
+                                        <span v-if="!triviaCompleted" class="inline-block bg-green-400 text-green-900 px-4 py-2 rounded-full text-sm font-bold animate-pulse">
+                                            Ready!
+                                        </span>
+                                        <span v-else class="inline-block bg-gray-600 text-gray-200 px-4 py-2 rounded-full text-sm font-bold">
+                                            ✓ Done
                                         </span>
                                     </div>
                                 </div>
@@ -110,7 +115,7 @@ const enter = async () => {
 
                             <!-- Music Card -->
                             <Link :href="route('music')">
-                                <div class="group bg-gradient-to-br from-pink-600 to-purple-800 rounded-2xl p-8 shadow-xl border border-pink-500/30 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                                <div class="group bg-gradient-to-br from-pink-600 to-purple-800 rounded-2xl p-8 shadow-xl border border-pink-500/30 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer relative overflow-hidden animate-slide-up" style="animation-delay: 0.4s;">
                                     <div class="absolute top-0 right-0 text-9xl opacity-10 transform rotate-12">
                                         🎵
                                     </div>
@@ -118,8 +123,8 @@ const enter = async () => {
                                         <div class="text-5xl mb-4">🎵</div>
                                         <h3 class="text-3xl font-bold mb-2">Music Rating</h3>
                                         <p class="text-pink-200 mb-4">Rate today's song</p>
-                                        <span class="inline-block bg-green-400 text-green-900 px-4 py-2 rounded-full text-sm font-bold">
-                                            ✓ Ready!
+                                        <span class="inline-block bg-green-400 text-green-900 px-4 py-2 rounded-full text-sm font-bold animate-pulse">
+                                            Ready!
                                         </span>
                                     </div>
                                 </div>
@@ -127,7 +132,7 @@ const enter = async () => {
 
                             <!-- Emoji Movie Card -->
                             <Link :href="route('emoji')">
-                                <div class="group bg-gradient-to-br from-yellow-600 to-orange-800 rounded-2xl p-8 shadow-xl border border-yellow-500/30 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                                <div class="group bg-gradient-to-br from-yellow-600 to-orange-800 rounded-2xl p-8 shadow-xl border border-yellow-500/30 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer relative overflow-hidden animate-slide-up" style="animation-delay: 0.5s;">
                                     <div class="absolute top-0 right-0 text-9xl opacity-10 transform rotate-12">
                                         🎬
                                     </div>
@@ -135,8 +140,11 @@ const enter = async () => {
                                         <div class="text-5xl mb-4">🎬</div>
                                         <h3 class="text-3xl font-bold mb-2">Emoji Movie</h3>
                                         <p class="text-yellow-200 mb-4">Guess the movie</p>
-                                        <span class="inline-block bg-green-400 text-green-900 px-4 py-2 rounded-full text-sm font-bold">
-                                            ✓ Ready!
+                                        <span v-if="!emojiCompleted" class="inline-block bg-green-400 text-green-900 px-4 py-2 rounded-full text-sm font-bold animate-pulse">
+                                            Ready!
+                                        </span>
+                                        <span v-else class="inline-block bg-gray-600 text-gray-200 px-4 py-2 rounded-full text-sm font-bold">
+                                            ✓ Done
                                         </span>
                                     </div>
                                 </div>
@@ -145,7 +153,7 @@ const enter = async () => {
                     </div>
 
                     <!-- Coming Soon Section -->
-                    <div class="mb-12">
+                    <div class="mb-12 animate-slide-up" style="animation-delay: 0.6s;">
                         <h2 class="text-3xl font-bold mb-6 text-center">Coming Soon</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Hunt Card -->
@@ -181,7 +189,7 @@ const enter = async () => {
                     </div>
 
                     <!-- Services Table -->
-                    <div v-if="services && services.length > 0" class="bg-gray-900/50 backdrop-blur-sm rounded-2xl border border-gray-700 p-8 shadow-xl">
+                    <div v-if="services && services.length > 0" class="bg-gray-900/50 backdrop-blur-sm rounded-2xl border border-gray-700 p-8 shadow-xl animate-slide-up" style="animation-delay: 0.7s;">
                         <h2 class="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
                             Your Redeemed Services
                         </h2>
@@ -244,4 +252,40 @@ const enter = async () => {
             </div>
         </div>
     </div>
+
+
 </template>
+
+  <style scoped>
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-slide-up {
+        opacity: 0;
+        animation: slideUp 0.6s ease-out forwards;
+    }
+
+    .animate-fade-in-up {
+        opacity: 0;
+        animation: fadeInUp 0.5s ease-out forwards;
+    }
+    </style>

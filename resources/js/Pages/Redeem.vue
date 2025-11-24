@@ -75,6 +75,60 @@ const fav = async (val, service) => {
             });
         }
 };
+
+const deleteService = async (serviceId) => {
+    if(confirm('Are you sure you don\'t want this service anymore?')){
+        try {
+            const response = await axios.delete(`/service/${serviceId}`);
+            if (response.data.success) {
+                toast.success(response.data.message || 'Service removed!', {
+                    autoClose: 2000,
+                });
+                // Remove service from the list
+                const index = props.services.findIndex(s => s.id === serviceId);
+                if (index > -1) {
+                    props.services.splice(index, 1);
+                }
+            } else {
+                toast.error(response.data.message || 'Failed to remove service.', {
+                    autoClose: 2000,
+                });
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'An error occurred. Please try again.', {
+                autoClose: 2000,
+            });
+        }
+    }
+};
+
+const suggestion = ref('');
+const submitSuggestion = async () => {
+    if (!suggestion.value.trim()) {
+        toast.error('Please enter a suggestion!', {
+            autoClose: 2000,
+        });
+        return;
+    }
+    
+    try {
+        const response = await axios.post('/suggestion', { description: suggestion.value });
+        if (response.data.success) {
+            toast.success(response.data.message || 'Thank you for your suggestion!', {
+                autoClose: 2000,
+            });
+            suggestion.value = ''; // Clear the textarea
+        } else {
+            toast.error(response.data.message || 'Failed to submit suggestion.', {
+                autoClose: 2000,
+            });
+        }
+    } catch (error) {
+        toast.error(error.response?.data?.message || 'An error occurred. Please try again.', {
+            autoClose: 2000,
+        });
+    }
+};
 // Clear all filters
 const clearFilters = () => {
     filters.value = {
@@ -223,7 +277,7 @@ onMounted(() => {
                             </div>
 
                             <!-- Card Footer -->
-                            <div class="px-6 pb-6">
+                            <div class="px-6 pb-6 space-y-3">
                                 <button
                                     v-if="credits.credits >= service.cost"
                                     @click="use(service.id, service.cost)"
@@ -244,7 +298,53 @@ onMounted(() => {
                                     </svg>
                                     <span>{{ service.cost }} Credits</span>
                                 </div>
+
+                                <!-- Delete Button -->
+                                <button
+                                    @click="deleteService(service.id)"
+                                    class="w-full bg-gray-700 hover:bg-red-600 text-gray-300 hover:text-white font-semibold py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center space-x-2 text-sm"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span>I don't want this</span>
+                                </button>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Suggestion Section -->
+                    <div class="mt-12 mb-8">
+                        <div class="bg-gradient-to-br from-purple-900/50 to-blue-900/50 backdrop-blur-sm rounded-2xl border border-purple-500/30 p-8 shadow-2xl max-w-2xl mx-auto">
+                            <div class="text-center mb-6">
+                                <h2 class="text-3xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                                    Have a Suggestion?
+                                </h2>
+                                <p class="text-gray-400">We'd love to hear your ideas for new services!</p>
+                            </div>
+                            <form @submit.prevent="submitSuggestion" class="space-y-4">
+                                <div>
+                                    <label for="suggestion" class="block text-sm font-medium text-gray-300 mb-2">
+                                        Your Suggestion
+                                    </label>
+                                    <textarea
+                                        id="suggestion"
+                                        v-model="suggestion"
+                                        rows="4"
+                                        class="w-full bg-gray-800/50 text-white border border-gray-600 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder-gray-500 transition duration-300"
+                                        placeholder="Tell us what service you'd like to see..."
+                                    ></textarea>
+                                </div>
+                                <button
+                                    type="submit"
+                                    class="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-xl transition duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                                    </svg>
+                                    <span>Submit Suggestion</span>
+                                </button>
+                            </form>
                         </div>
                     </div>
 
