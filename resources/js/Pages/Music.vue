@@ -9,6 +9,7 @@ const props = defineProps({
     song: Object // Expected: { title, artist, album, spotify_url, apple_music_url }
 });
 
+const currentSong = ref(props.song);
 const selectedRating = ref(null);
 
 const submitRating = async () => {
@@ -21,13 +22,19 @@ const submitRating = async () => {
 
     try {
         const response = await axios.post('/music/rate', {
-            song_id: props.song.id,
+            song_id: currentSong.value.id,
             rating: selectedRating.value
         });
 
         toast(response.data.message || "Rating submitted successfully!", {
             autoClose: 2000,
         });
+
+        // Update to new song if available
+        if (response.data.newSong) {
+            currentSong.value = response.data.newSong;
+            selectedRating.value = null; // Reset rating selection
+        }
     } catch (error) {
         toast(error.response?.data?.message || "An error occurred.", {
             autoClose: 2000,
@@ -45,16 +52,16 @@ const submitRating = async () => {
                     <div class="max-w-2xl mx-auto">
                         <!-- Song Details -->
                         <div class="text-center mb-8">
-                            <h1 class="text-5xl font-bold mb-4">{{ song.title }}</h1>
-                            <p class="text-3xl text-gray-300 mb-2">{{ song.artist }}</p>
-                            <p class="text-2xl text-gray-400">{{ song.album }}</p>
+                            <h1 class="text-5xl font-bold mb-4">{{ currentSong.title }}</h1>
+                            <p class="text-3xl text-gray-300 mb-2">{{ currentSong.artist }}</p>
+                            <p class="text-2xl text-gray-400">{{ currentSong.album }}</p>
                         </div>
 
                         <!-- Streaming Service Buttons -->
                         <div class="flex gap-4 justify-center mb-8">
                             <a
-                                v-if="song.spotify_url"
-                                :href="song.spotify_url"
+                                v-if="currentSong.spotify_url"
+                                :href="currentSong.spotify_url"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
@@ -62,8 +69,8 @@ const submitRating = async () => {
                                 Listen on Spotify
                             </a>
                             <a
-                                v-if="song.apple_music_url"
-                                :href="song.apple_music_url"
+                                v-if="currentSong.apple_music_url"
+                                :href="currentSong.apple_music_url"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200"

@@ -15,7 +15,7 @@ class MusicController extends Controller
     public function index()
     {
         // Get one song - you can modify this to get a specific song or random one
-        $song = Song::where('rating',0)->inRandomOrder()->first(); // Gets the first song, or use ->inRandomOrder()->first() for random
+        $song = Song::where('rating',0)->first(); // Gets the first song, or use ->inRandomOrder()->first() for random
 
         if (!$song) {
             return Inertia::render('Music', [
@@ -43,7 +43,7 @@ class MusicController extends Controller
     }
 
     /**
-     * Update the song rating.
+     * Update the song rating and return a new song.
      */
     public function rate(Request $request)
     {
@@ -58,9 +58,28 @@ class MusicController extends Controller
         $song->rating = $request->rating;
         $song->save();
 
+        // Get a new song with no rating
+        $newSong = Song::where('rating', 0)->first();
+
+        if (!$newSong) {
+            return Response::json([
+                'message' => 'Thank you for rating this song! No more songs available.',
+                'rating' => $song->rating,
+                'newSong' => null,
+            ], 200);
+        }
+
         return Response::json([
             'message' => 'Thank you for rating this song!',
             'rating' => $song->rating,
+            'newSong' => [
+                'id' => $newSong->id,
+                'title' => $newSong->title,
+                'artist' => $newSong->artist,
+                'album' => $newSong->album,
+                'spotify_url' => $newSong->spotify_link ?? null,
+                'apple_music_url' => $newSong->apple_music_link ?? null,
+            ]
         ], 200);
     }
 }
