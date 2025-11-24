@@ -107,13 +107,19 @@ const enter = async () => {
                                 </label>
                             </div>
                         </div>
-                        <SecondaryButton @click="enter();">Enter</SecondaryButton>
+                        <SecondaryButton class="text-center" @click="enter();">Submit</SecondaryButton>
                     </div>
                     <div v-else class="text-6xl gap-6 my-3 text-center ">
                         You are done for today!
                         <div class="text-2xl text-center" v-if="showAnswer"> Answer: {{ answer }}
                         </div>
                     </div>
+
+                    <Link :href="route('holding')" class="mt-4" >
+                        <p class="bg-blue-700 p-3 text-3xl text-center rounded-xl text-white my-4">
+                             Back<br>
+                        </p>
+                    </Link>
                 </main>
 
 

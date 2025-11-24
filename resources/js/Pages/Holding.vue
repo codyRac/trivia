@@ -126,7 +126,7 @@ const enter = async () => {
                                     >
                                         <td class="px-6 py-4 text-lg text-gray-300">{{ service.title }}</td>
                                         <td class="px-6 py-4 text-lg text-center">
-                                            <span class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-blue-600 text-white font-semibold">
+                                            <span class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-green-600 text-white font-semibold">
                                                 {{ service.times_used ?? 0 }}
                                             </span>
                                         </td>

@@ -1,5 +1,5 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import axios from 'axios';
 import { toast } from 'vue3-toastify';
@@ -106,7 +106,14 @@ const submitRating = async () => {
                                 </button>
                             </div>
                         </div>
+
                     </div>
+
+                    <Link :href="route('holding')" class="mt-4" >
+                            <p class="bg-blue-700 p-3 text-3xl text-center rounded-xl text-white my-4">
+                                Back
+                            </p>
+                        </Link>
                 </main>
             </div>
         </div>
