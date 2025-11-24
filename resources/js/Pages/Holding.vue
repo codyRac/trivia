@@ -84,6 +84,12 @@ const enter = async () => {
                             <span class="text-xs">Ready!</span>
                         </p>
                     </Link>
+                    <Link :href="route('music')" class="mt-4" >
+                        <p class="bg-green-700 p-3 text-3xl text-center rounded-xl text-white my-4">
+                             Music<br>
+                            <span class="text-xs">Ready!</span>
+                        </p>
+                    </Link>
                     <div  class="mt-4" >
                         <p class="bg-gray-600 p-3 text-3xl text-center rounded-xl text-white my-2">
                             Game<br>

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{ProfileController, WelcomeController, TriviaController, ServiceController, CreditController};
+use App\Http\Controllers\{ProfileController, WelcomeController, TriviaController, ServiceController, CreditController, MusicController};
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -21,6 +21,9 @@ Route::get('/holding', [WelcomeController::class, 'holding'])->name('holding');
 Route::get('/trivia',[TriviaController::class, 'index'])->name('trivia');
 Route::post('/trivia_answer',[TriviaController::class, 'answered'])->name('answered');
 Route::post('/use-credits',[CreditController::class, 'useCredits'])->name('useCredits');
+
+Route::get('/music',[MusicController::class, 'index'])->name('music');
+Route::post('/music/rate',[MusicController::class, 'rate'])->name('music.rate');
 
 
 Route::get('/redeem',[ServiceController::class, 'redeem'])->name('redeem');

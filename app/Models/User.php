@@ -38,7 +38,7 @@ class User extends Authenticatable implements FilamentUser
     ];
     public function canAccessPanel(Panel $panel): bool
     {
-        return str_ends_with($this->email, '@triviacreditvault.com') && $this->hasVerifiedEmail();
+        return true;
     }
     /**
      * Get the attributes that should be cast.
