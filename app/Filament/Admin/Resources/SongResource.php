@@ -73,10 +73,10 @@ class SongResource extends Resource
                 Tables\Columns\TextColumn::make('rating')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('spotify_link')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('apple_music_link')
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('spotify_link')
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('apple_music_link')
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
