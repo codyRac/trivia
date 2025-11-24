@@ -70,11 +70,12 @@ const enter = async () => {
                     <div class="grid gap-6 text-center lg:grid-cols-1 lg:gap-8">
                         <div class="rounded bg-green-900 text-3xl p-3">
                             Credits:
-                            <div class="text-5xl">{{ credits.credits  ?? 0 }}</div>
+                            <div class="text-5xl mb-2">{{ credits.credits  ?? 0 }}</div>
                             <Link
+                            class="bg-yellow-300 px-3 text-black text-center rounded-xl"
                                 :href="route('redeem')"
                             >
-                                <SecondaryButton>redeem</SecondaryButton>
+                            Redeem
                             </Link>
                         </div>
                     </div>
@@ -91,12 +92,12 @@ const enter = async () => {
                             <span class="text-xs">Ready!</span>
                         </p>
                     </Link>
-                    <div  class="mt-4" >
-                        <p class="bg-gray-600 p-3 text-3xl text-center rounded-xl text-white my-2">
-                            Game<br>
-                            <span class="text-xs">Coming soon</span>
+                    <Link :href="route('emoji')" class="mt-4" >
+                        <p class="bg-green-700 p-3 text-3xl text-center rounded-xl text-white my-4">
+                            🎬 Emoji Movie Puzzle<br>
+                            <span class="text-xs">Ready!</span>
                         </p>
-                    </div>
+                    </Link>
                     <div  class="mt-4" >
                         <p class="bg-gray-600 p-3 text-3xl text-center rounded-xl text-white my-2">
                             Hunt<br>
