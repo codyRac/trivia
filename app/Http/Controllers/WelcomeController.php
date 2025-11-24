@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Credit;
+use App\Models\Service;
 
 class WelcomeController extends Controller
 {
@@ -34,9 +35,12 @@ class WelcomeController extends Controller
 
         $credits =  Credit::find(1);
 
+        $services = Service::whereColumn('times_used', '>', 'fulfilled')->get();
+
 
         return Inertia::render('Holding', [
             'credits'=> $credits,
+            'services'=> $services,
 
         ]);
     }

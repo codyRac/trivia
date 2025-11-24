@@ -10,6 +10,7 @@ import 'vue3-toastify/dist/index.css';
 const props = defineProps({
     credits: Object,
     trivia: Object,
+    services: Object,
     canAnswer: Boolean // Assume trivia has properties like question and answers
 });
 const credits = ref(props.credits); // Make credits reactive
@@ -101,6 +102,43 @@ const enter = async () => {
                             Hunt<br>
                             <span class="text-xs">Coming soon</span>
                         </p>
+                    </div>
+
+                    <!-- Services Table -->
+                    <div v-if="services && services.length > 0" class="mt-8">
+                        <h2 class="text-3xl font-bold text-center mb-4">Your Services</h2>
+                        <div class="overflow-x-auto rounded-lg border border-gray-700">
+                            <table class="w-full text-left">
+                                <thead class="bg-gray-800">
+                                    <tr>
+                                        <th class="px-6 py-4 text-xl font-semibold text-gray-200">Service Title</th>
+                                        <th class="px-6 py-4 text-xl font-semibold text-gray-200 text-center">Times Used</th>
+                                        <th class="px-6 py-4 text-xl font-semibold text-gray-200 text-center">Times Fulfilled</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-700">
+                                    <tr
+                                        v-for="(service, index) in services"
+                                        :key="service.id"
+                                        :class="index % 2 === 0 ? 'bg-gray-900' : 'bg-gray-800'"
+                                        class="hover:bg-gray-700 transition-colors"
+                                    >
+                                        <td class="px-6 py-4 text-lg text-gray-300">{{ service.title }}</td>
+                                        <td class="px-6 py-4 text-lg text-center">
+                                            <span class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-blue-600 text-white font-semibold">
+                                                {{ service.times_used ?? 0 }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 text-lg text-center">
+                                            <span class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-blue-600 text-white font-semibold">
+                                                {{ service.fulfilled ?? 0 }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </main>
 
