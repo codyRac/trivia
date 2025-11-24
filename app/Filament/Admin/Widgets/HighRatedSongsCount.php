@@ -8,7 +8,7 @@ use App\Models\Song;
 
 class HighRatedSongsCount extends BaseWidget
 {
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 8;
 
     protected function getStats(): array
     {

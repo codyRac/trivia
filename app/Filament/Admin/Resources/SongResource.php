@@ -47,11 +47,9 @@ class SongResource extends Resource
                 Forms\Components\TextInput::make('rating')
                     ->numeric(),
                 Forms\Components\TextInput::make('spotify_link')
-                    ->required()
-                    ->default(0),
+                    ->default(null),
                 Forms\Components\TextInput::make('apple_music_link')
-                    ->required()
-                    ->default(0),
+                    ->default(null),
             ]);
     }
 
@@ -97,37 +95,37 @@ class SongResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->headerActions([
-    Action::make('importCsv')
-        ->label('Import CSV')
-        ->icon('heroicon-o-arrow-up-tray')
-        ->form([
-            Forms\Components\FileUpload::make('csv_file')
-                ->label('CSV file')
-                ->disk('local')              // adjust if needed
-                ->directory('imports/songs') // optional
-                ->acceptedFileTypes(['text/csv', 'text/plain', 'application/vnd.ms-excel'])
-                ->required(),
-        ])
-        // Note the type-hinted SongImportService — Laravel will resolve it
-        ->action(function (array $data, SongImportService $importer): void {
-                try {
-                    $path = Storage::disk('local')->path($data['csv_file']);
+                Action::make('importCsv')
+                    ->label('Import CSV')
+                    ->icon('heroicon-o-arrow-up-tray')
+                    ->form([
+                        Forms\Components\FileUpload::make('csv_file')
+                            ->label('CSV file')
+                            ->disk('local')              // adjust if needed
+                            ->directory('imports/songs') // optional
+                            ->acceptedFileTypes(['text/csv', 'text/plain', 'application/vnd.ms-excel'])
+                            ->required(),
+                    ])
+                    // Note the type-hinted SongImportService — Laravel will resolve it
+                    ->action(function (array $data, SongImportService $importer): void {
+                            try {
+                                $path = Storage::disk('local')->path($data['csv_file']);
 
-                    $created = $importer->importFromCsv($path);
+                                $created = $importer->importFromCsv($path);
 
-                    Notification::make()
-                        ->title('Import complete')
-                        ->success()
-                        ->body("Imported {$created} songs from CSV.")
-                        ->send();
-                } catch (\Throwable $e) {
-                    Notification::make()
-                        ->title('Import failed')
-                        ->danger()
-                        ->body($e->getMessage())
-                        ->send();
-                }
-            }),
+                                Notification::make()
+                                    ->title('Import complete')
+                                    ->success()
+                                    ->body("Imported {$created} songs from CSV.")
+                                    ->send();
+                            } catch (\Throwable $e) {
+                                Notification::make()
+                                    ->title('Import failed')
+                                    ->danger()
+                                    ->body($e->getMessage())
+                                    ->send();
+                            }
+                        }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

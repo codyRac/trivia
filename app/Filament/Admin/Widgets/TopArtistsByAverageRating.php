@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class TopArtistsByAverageRating extends ChartWidget
 {
     protected static ?string $heading = 'Top 5 Artists by Average Rating';
-    protected static ?int $sort = 6;
+    protected static ?int $sort = 8;
 
     protected function getData(): array
     {

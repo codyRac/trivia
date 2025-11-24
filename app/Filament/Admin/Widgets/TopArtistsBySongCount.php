@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class TopArtistsBySongCount extends ChartWidget
 {
     protected static ?string $heading = 'Top 5 Artists by Song Count';
-    protected static ?int $sort = 5;
+    protected static ?int $sort = 8;
 
     protected function getData(): array
     {
