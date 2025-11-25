@@ -110,7 +110,7 @@ const submitSuggestion = async () => {
         });
         return;
     }
-    
+
     try {
         const response = await axios.post('/suggestion', { description: suggestion.value });
         if (response.data.success) {
@@ -165,6 +165,7 @@ onMounted(() => {
                         <p class="text-gray-400 text-lg">Choose from our amazing services and rewards</p>
                     </div>
 
+
                     <!-- Credits Display Card -->
                     <div class="mb-10">
                         <div class="bg-gradient-to-br from-green-600 to-green-800 rounded-2xl p-8 shadow-2xl border border-green-500/30 max-w-md mx-auto transform hover:scale-105 transition-transform duration-300">
@@ -180,6 +181,16 @@ onMounted(() => {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="my-3 text-center">
+                        <Link :href="route('holding')" class="inline-block">
+                            <button class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-4 px-8 rounded-xl transition duration-300 flex items-center space-x-2 shadow-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                </svg>
+                                <span>Back to Home</span>
+                            </button>
+                        </Link>
                     </div>
 
                     <!-- Filter Section -->

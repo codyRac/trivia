@@ -37,9 +37,7 @@ class EmojiController extends Controller
 
         // Get a random puzzle that hasn't been used today
         $puzzle = EmojiMoviePuzzle::where(function($query) use ($todayStartUTC) {
-                $query->whereNull('used')
-                    ->orWhere('used', 0)
-                    ->orWhere('updated_at', '<', $todayStartUTC);
+                $query->whereNull('used');
             })
             ->inRandomOrder()
             ->first();
