@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\TriviaResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Admin\Resources\TriviaResource;
 use App\Filament\Admin\Widgets\{LatestTrivia,StatsOverview };
 
@@ -15,7 +16,7 @@ class ListTrivia extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
     protected function getHeaderWidgets(): array

@@ -2,11 +2,25 @@
 
 namespace App\Filament\Admin\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreBulkAction;
+use App\Filament\Admin\Resources\ServiceResource\Pages\ListServices;
+use App\Filament\Admin\Resources\ServiceResource\Pages\CreateService;
+use App\Filament\Admin\Resources\ServiceResource\Pages\ViewService;
+use App\Filament\Admin\Resources\ServiceResource\Pages\EditService;
 use App\Filament\Admin\Resources\ServiceResource\Pages;
 use App\Filament\Admin\Resources\ServiceResource\RelationManagers;
 use App\Models\Service;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,7 +31,7 @@ class ServiceResource extends Resource
 {
     protected static ?string $model = Service::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-bell-alert';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-bell-alert';
     protected static ?int $navigationSort = 2;
 
     public static function getNavigationBadge(): ?string
@@ -25,28 +39,28 @@ class ServiceResource extends Resource
         return static::getModel()::count();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
 
-                Forms\Components\TextInput::make('title')
+                TextInput::make('title')
                     ->required()
                     ->maxLength(255),
-                    Forms\Components\TextInput::make('category')
+                    TextInput::make('category')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('duration')
+                TextInput::make('duration')
                     ->maxLength(255),
 
-                Forms\Components\TextInput::make('cost')
+                TextInput::make('cost')
                     ->required()
                     ->numeric()
                     ->default(10)
                     ->prefix('$'),
-                Forms\Components\TextInput::make('times_used')
+                TextInput::make('times_used')
                     ->required(),
-                    Forms\Components\TextInput::make('fulfilled')
+                    TextInput::make('fulfilled')
                     ->required(),
             ]);
     }
@@ -55,48 +69,48 @@ class ServiceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('category')
+                TextColumn::make('category')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('duration')
+                TextColumn::make('duration')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('cost')
+                TextColumn::make('cost')
                     ->money()
                     ->sortable(),
-                    Tables\Columns\TextColumn::make('times_used')
+                    TextColumn::make('times_used')
                     ->sortable(),
-                    Tables\Columns\TextColumn::make('fulfilled')
+                    TextColumn::make('fulfilled')
                     ->sortable(),
 
-                    Tables\Columns\IconColumn::make('favorite')
+                    IconColumn::make('favorite')
                 ->boolean()
                 ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('deleted_at')
+                TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -111,10 +125,10 @@ class ServiceResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListServices::route('/'),
-            'create' => Pages\CreateService::route('/create'),
-            'view' => Pages\ViewService::route('/{record}'),
-            'edit' => Pages\EditService::route('/{record}/edit'),
+            'index' => ListServices::route('/'),
+            'create' => CreateService::route('/create'),
+            'view' => ViewService::route('/{record}'),
+            'edit' => EditService::route('/{record}/edit'),
         ];
     }
 

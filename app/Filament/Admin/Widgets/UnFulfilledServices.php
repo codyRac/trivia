@@ -2,6 +2,8 @@
 
 namespace App\Filament\Admin\Widgets;
 
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
 use App\Models\Service;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -24,21 +26,21 @@ class UnFulfilledServices extends BaseWidget
                 $query
             )
             ->columns([
-                Tables\Columns\TextColumn::make('category')
+                TextColumn::make('category')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('duration')
+                TextColumn::make('duration')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('cost')
+                TextColumn::make('cost')
                     ->money()
                     ->sortable(),
-                    Tables\Columns\TextColumn::make('times_used')
+                    TextColumn::make('times_used')
                     ->sortable(),
-                    Tables\Columns\TextColumn::make('fulfilled')
+                    TextColumn::make('fulfilled')
                     ->sortable(),
 
-                    Tables\Columns\IconColumn::make('favorite')
+                    IconColumn::make('favorite')
                 ->boolean()
                 ->sortable(),
             ]);

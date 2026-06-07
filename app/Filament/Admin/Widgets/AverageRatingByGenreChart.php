@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class AverageRatingByGenreChart extends ChartWidget
 {
-    protected static ?string $heading = 'Average Rating per Genre';
+    protected ?string $heading = 'Average Rating per Genre';
     protected static ?int $sort = 4;
 
     protected function getData(): array

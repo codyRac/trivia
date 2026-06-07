@@ -8,10 +8,10 @@ use Carbon\Carbon;
 
 class ServicesSpentRecently extends ChartWidget
 {
-    protected static ?string $heading = 'Services Used';
+    protected ?string $heading = 'Services Used';
     protected static ?int $sort = 2;
 
-    protected static string $color = 'info';
+    protected string $color = 'info';
 
     protected function getFilters(): ?array
     {

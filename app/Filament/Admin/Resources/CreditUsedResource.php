@@ -2,11 +2,26 @@
 
 namespace App\Filament\Admin\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreBulkAction;
+use App\Filament\Admin\Resources\CreditUsedResource\Pages\ListCreditUseds;
+use App\Filament\Admin\Resources\CreditUsedResource\Pages\CreateCreditUsed;
+use App\Filament\Admin\Resources\CreditUsedResource\Pages\ViewCreditUsed;
+use App\Filament\Admin\Resources\CreditUsedResource\Pages\EditCreditUsed;
 use App\Filament\Admin\Resources\CreditUsedResource\Pages;
 use App\Filament\Admin\Resources\CreditUsedResource\RelationManagers;
 use App\Models\CreditUsed;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,26 +32,26 @@ class CreditUsedResource extends Resource
 {
     protected static ?string $model = CreditUsed::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-banknotes';
     protected static ?int $navigationSort = 3;
 
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
     }
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('service_id')
+        return $schema
+            ->components([
+                Select::make('service_id')
                     ->required()
                     ->relationship('service','title')
                     ->searchable(),
-                Forms\Components\TextInput::make('credits')
+                TextInput::make('credits')
                     ->required()
                     ->numeric()
                     ->default(0),
-                Forms\Components\DateTimePicker::make('date_used'),
+                DateTimePicker::make('date_used'),
             ]);
     }
 
@@ -44,40 +59,40 @@ class CreditUsedResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('service.title')
+                TextColumn::make('service.title')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('credits')
+                TextColumn::make('credits')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('date_used')
+                TextColumn::make('date_used')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('deleted_at')
+                TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -92,10 +107,10 @@ class CreditUsedResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCreditUseds::route('/'),
-            'create' => Pages\CreateCreditUsed::route('/create'),
-            'view' => Pages\ViewCreditUsed::route('/{record}'),
-            'edit' => Pages\EditCreditUsed::route('/{record}/edit'),
+            'index' => ListCreditUseds::route('/'),
+            'create' => CreateCreditUsed::route('/create'),
+            'view' => ViewCreditUsed::route('/{record}'),
+            'edit' => EditCreditUsed::route('/{record}/edit'),
         ];
     }
 
