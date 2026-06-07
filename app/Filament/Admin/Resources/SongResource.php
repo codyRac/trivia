@@ -2,17 +2,27 @@
 
 namespace App\Filament\Admin\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\Action;
+use Filament\Forms\Components\FileUpload;
+use Throwable;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Admin\Resources\SongResource\Pages\ListSongs;
+use App\Filament\Admin\Resources\SongResource\Pages\CreateSong;
+use App\Filament\Admin\Resources\SongResource\Pages\EditSong;
 use App\Filament\Admin\Resources\SongResource\Pages;
 use App\Filament\Admin\Resources\SongResource\RelationManagers;
 use App\Models\Song;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
 use App\Services\SongImportService;
@@ -22,33 +32,33 @@ class SongResource extends Resource
 {
     protected static ?string $model = Song::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-musical-note';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-musical-note';
 
      public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('title')
+        return $schema
+            ->components([
+                TextInput::make('title')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('artist')
+                TextInput::make('artist')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('album')
+                TextInput::make('album')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('year')
+                TextInput::make('year')
                     ->numeric(),
-                Forms\Components\TextInput::make('genre')
+                TextInput::make('genre')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('rating')
+                TextInput::make('rating')
                     ->numeric(),
-                Forms\Components\TextInput::make('spotify_link')
+                TextInput::make('spotify_link')
                     ->default(null),
-                Forms\Components\TextInput::make('apple_music_link')
+                TextInput::make('apple_music_link')
                     ->default(null),
             ]);
     }
@@ -57,33 +67,33 @@ class SongResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('artist')
+                TextColumn::make('artist')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('album')
+                TextColumn::make('album')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('year')
+                TextColumn::make('year')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('genre')
+                TextColumn::make('genre')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('rating')
+                TextColumn::make('rating')
                     ->numeric()
                     ->sortable(),
                 // Tables\Columns\TextColumn::make('spotify_link')
                 //     ->sortable(),
                 // Tables\Columns\TextColumn::make('apple_music_link')
                 //     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('deleted_at')
+                TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -91,15 +101,15 @@ class SongResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
             ->headerActions([
                 Action::make('importCsv')
                     ->label('Import CSV')
                     ->icon('heroicon-o-arrow-up-tray')
-                    ->form([
-                        Forms\Components\FileUpload::make('csv_file')
+                    ->schema([
+                        FileUpload::make('csv_file')
                             ->label('CSV file')
                             ->disk('local')              // adjust if needed
                             ->directory('imports/songs') // optional
@@ -118,7 +128,7 @@ class SongResource extends Resource
                                     ->success()
                                     ->body("Imported {$created} songs from CSV.")
                                     ->send();
-                            } catch (\Throwable $e) {
+                            } catch (Throwable $e) {
                                 Notification::make()
                                     ->title('Import failed')
                                     ->danger()
@@ -127,9 +137,9 @@ class SongResource extends Resource
                             }
                         }),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -144,9 +154,9 @@ class SongResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSongs::route('/'),
-            'create' => Pages\CreateSong::route('/create'),
-            'edit' => Pages\EditSong::route('/{record}/edit'),
+            'index' => ListSongs::route('/'),
+            'create' => CreateSong::route('/create'),
+            'edit' => EditSong::route('/{record}/edit'),
         ];
     }
 }

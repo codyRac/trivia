@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Widgets;
 
+use Filament\Tables\Columns\TextColumn;
 use App\Filament\Admin\Resources\TriviaResource;
 use App\Models\Trivia;
 use Filament\Tables;
@@ -26,40 +27,40 @@ class LatestTrivia extends BaseWidget
             ->defaultPaginationPageOption(5)
             ->defaultSort('used_on', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('category')
+                TextColumn::make('category')
                     ->searchable()
                     ->sortable(),
-                    Tables\Columns\TextColumn::make('question')
+                    TextColumn::make('question')
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('answer')
+                TextColumn::make('answer')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('wrong_1')
+                TextColumn::make('wrong_1')
                     ->searchable()->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('wrong_2')
+                TextColumn::make('wrong_2')
                     ->searchable()->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('wrong_3')
+                TextColumn::make('wrong_3')
                     ->searchable()->toggleable(isToggledHiddenByDefault: true),
 
-                Tables\Columns\TextColumn::make('used_on')
+                TextColumn::make('used_on')
                 ->dateTime()
                 ->since()
                 ->sortable()
                 ->searchable(),
-                Tables\Columns\TextColumn::make('result')
+                TextColumn::make('result')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('deleted_at')
+                TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

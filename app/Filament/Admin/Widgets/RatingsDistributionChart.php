@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class RatingsDistributionChart extends ChartWidget
 {
-    protected static ?string $heading = 'Ratings Distribution';
+    protected ?string $heading = 'Ratings Distribution';
     protected static ?int $sort = 8;
 
     protected function getData(): array

@@ -2,11 +2,24 @@
 
 namespace App\Filament\Admin\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreBulkAction;
+use App\Filament\Admin\Resources\CreditResource\Pages\ListCredits;
+use App\Filament\Admin\Resources\CreditResource\Pages\CreateCredit;
+use App\Filament\Admin\Resources\CreditResource\Pages\ViewCredit;
+use App\Filament\Admin\Resources\CreditResource\Pages\EditCredit;
 use App\Filament\Admin\Resources\CreditResource\Pages;
 use App\Filament\Admin\Resources\CreditResource\RelationManagers;
 use App\Models\Credit;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,21 +30,21 @@ class CreditResource extends Resource
 {
     protected static ?string $model = Credit::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-currency-dollar';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('credits')
+        return $schema
+            ->components([
+                TextInput::make('credits')
                     ->required()
                     ->numeric()
                     ->default(25),
-                Forms\Components\TextInput::make('spent')
+                TextInput::make('spent')
                     ->required()
                     ->numeric()
                     ->default(0),
-                Forms\Components\TextInput::make('earned')
+                TextInput::make('earned')
                     ->required()
                     ->numeric()
                     ->default(0),
@@ -42,40 +55,40 @@ class CreditResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('credits')
+                TextColumn::make('credits')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('spent')
+                TextColumn::make('spent')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('earned')
+                TextColumn::make('earned')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('deleted_at')
+                TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -90,10 +103,10 @@ class CreditResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCredits::route('/'),
-            'create' => Pages\CreateCredit::route('/create'),
-            'view' => Pages\ViewCredit::route('/{record}'),
-            'edit' => Pages\EditCredit::route('/{record}/edit'),
+            'index' => ListCredits::route('/'),
+            'create' => CreateCredit::route('/create'),
+            'view' => ViewCredit::route('/{record}'),
+            'edit' => EditCredit::route('/{record}/edit'),
         ];
     }
 

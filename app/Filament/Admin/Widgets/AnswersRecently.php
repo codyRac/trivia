@@ -8,10 +8,10 @@ use Illuminate\Support\Carbon;
 
 class AnswersRecently extends ChartWidget
 {
-    protected static ?string $heading = 'Answer Results';
+    protected ?string $heading = 'Answer Results';
 
     protected static ?int $sort = 2;
-    protected static string $color = 'success';
+    protected string $color = 'success';
 
 
     protected function getFilters(): ?array

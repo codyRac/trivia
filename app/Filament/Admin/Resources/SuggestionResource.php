@@ -2,11 +2,19 @@
 
 namespace App\Filament\Admin\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Admin\Resources\SuggestionResource\Pages\ListSuggestions;
+use App\Filament\Admin\Resources\SuggestionResource\Pages\CreateSuggestion;
+use App\Filament\Admin\Resources\SuggestionResource\Pages\EditSuggestion;
 use App\Filament\Admin\Resources\SuggestionResource\Pages;
 use App\Filament\Admin\Resources\SuggestionResource\RelationManagers;
 use App\Models\Suggestion;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,13 +25,13 @@ class SuggestionResource extends Resource
 {
     protected static ?string $model = Suggestion::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Textarea::make('description')
+        return $schema
+            ->components([
+                Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),
             ]);
@@ -33,15 +41,15 @@ class SuggestionResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('deleted_at')
+                TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -49,12 +57,12 @@ class SuggestionResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -69,9 +77,9 @@ class SuggestionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSuggestions::route('/'),
-            'create' => Pages\CreateSuggestion::route('/create'),
-            'edit' => Pages\EditSuggestion::route('/{record}/edit'),
+            'index' => ListSuggestions::route('/'),
+            'create' => CreateSuggestion::route('/create'),
+            'edit' => EditSuggestion::route('/{record}/edit'),
         ];
     }
 }

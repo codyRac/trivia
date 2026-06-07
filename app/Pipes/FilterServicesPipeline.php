@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Pipes;
+use Illuminate\Pipeline\Pipeline;
 use App\Pipes\Filters\SearchFilter;
 use Closure;
 
@@ -23,7 +24,7 @@ class FilterServicesPipeline
 
         ];
 
-        return app(\Illuminate\Pipeline\Pipeline::class)
+        return app(Pipeline::class)
             ->send($query)
             ->through([
                 // Filter by category

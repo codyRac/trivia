@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\SongResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Admin\Resources\SongResource;
 use App\Filament\Admin\Widgets\HighRatedSongsCount;
 use App\Filament\Admin\Widgets\RatingsDistributionChart;
@@ -18,7 +19,7 @@ class ListSongs extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 
