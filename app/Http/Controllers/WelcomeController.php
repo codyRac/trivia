@@ -8,6 +8,8 @@ use App\Models\Credit;
 use App\Models\Service;
 use App\Models\Trivia;
 use App\Models\EmojiMoviePuzzle;
+use App\Models\Flag;
+use App\Models\FlagDay;
 use Carbon\Carbon;
 
 class WelcomeController extends Controller
@@ -53,11 +55,18 @@ class WelcomeController extends Controller
             ->where('updated_at', '>=', $todayStartUTC)
             ->exists();
 
+        // Check if today's flag round is finished
+        $flagCompleted = FlagDay::whereDate('date', $todayStartLA->toDateString())
+            ->whereNotNull('completed_at')
+            ->exists();
+
         return Inertia::render('Holding', [
             'credits' => $credits,
             'services' => $services,
             'triviaCompleted' => $triviaCompleted,
             'emojiCompleted' => $emojiCompleted,
+            'flagCompleted' => $flagCompleted,
+            'flagsLearned' => Flag::whereNotNull('learned_order')->count(),
         ]);
     }
 

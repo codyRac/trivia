@@ -13,6 +13,8 @@ const props = defineProps({
     services: Object,
     triviaCompleted: Boolean,
     emojiCompleted: Boolean,
+    flagCompleted: Boolean,
+    flagsLearned: Number,
     canAnswer: Boolean // Assume trivia has properties like question and answers
 });
 const credits = ref(props.credits); // Make credits reactive
@@ -79,7 +81,7 @@ const enter = async () => {
 
                             <div class="relative z-10 text-center">
                                 <p class="text-green-200 text-2xl mb-2 font-medium">Your Credits</p>
-                                <p class="text-7xl font-bold text-white mb-6">{{ credits.credits ?? 0 }}</p>
+                                <p class="text-7xl font-bold text-white mb-6">{{ credits?.credits ?? 0 }}</p>
                                 <Link :href="route('redeem')">
                                     <button class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-4 px-10 rounded-xl transition duration-300 transform hover:scale-110 shadow-lg text-xl">
                                         💰 Redeem Now
@@ -141,6 +143,26 @@ const enter = async () => {
                                         <h3 class="text-3xl font-bold mb-2">Emoji Movie</h3>
                                         <p class="text-yellow-200 mb-4">Guess the movie</p>
                                         <span v-if="!emojiCompleted" class="inline-block bg-green-400 text-green-900 px-4 py-2 rounded-full text-sm font-bold animate-pulse">
+                                            Ready!
+                                        </span>
+                                        <span v-else class="inline-block bg-gray-600 text-gray-200 px-4 py-2 rounded-full text-sm font-bold">
+                                            ✓ Done
+                                        </span>
+                                    </div>
+                                </div>
+                            </Link>
+
+                            <!-- Flag Card -->
+                            <Link :href="route('flags')">
+                                <div class="group bg-gradient-to-br from-teal-600 to-cyan-800 rounded-2xl p-8 shadow-xl border border-teal-500/30 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer relative overflow-hidden animate-slide-up" style="animation-delay: 0.55s;">
+                                    <div class="absolute top-0 right-0 text-9xl opacity-10 transform rotate-12">
+                                        🌍
+                                    </div>
+                                    <div class="relative z-10">
+                                        <div class="text-5xl mb-4">🌍</div>
+                                        <h3 class="text-3xl font-bold mb-2">Daily Flags</h3>
+                                        <p class="text-teal-200 mb-4">{{ flagsLearned ?? 0 }} flags collected</p>
+                                        <span v-if="!flagCompleted" class="inline-block bg-green-400 text-green-900 px-4 py-2 rounded-full text-sm font-bold animate-pulse">
                                             Ready!
                                         </span>
                                         <span v-else class="inline-block bg-gray-600 text-gray-200 px-4 py-2 rounded-full text-sm font-bold">
