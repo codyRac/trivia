@@ -1,7 +1,7 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
 import TextInput from '@/Components/TextInput.vue';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import axios from 'axios';
 import { toast } from 'vue3-toastify';
@@ -56,6 +56,51 @@ const enter = async () => {
     console.log('Selected Answer:', selectedAnswer.value);
     // Implement your logic for handling the selected answer
 };
+// Countdown to November 15 at 2:00 PM (viewer's local time)
+const countdownTarget = (() => {
+    const now = new Date();
+    let target = new Date(now.getFullYear(), 10, 15, 14, 0, 0, 0); // month is 0-indexed: 10 = November
+    if (target <= now) {
+        target = new Date(now.getFullYear() + 1, 10, 15, 14, 0, 0, 0);
+    }
+    return target;
+})();
+
+const countdown = ref({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+const countdownDone = ref(false);
+let countdownInterval = null;
+
+const pad = (n) => String(n).padStart(2, '0');
+
+const updateCountdown = () => {
+    const diff = countdownTarget.getTime() - Date.now();
+    if (diff <= 0) {
+        countdown.value = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+        countdownDone.value = true;
+        if (countdownInterval) clearInterval(countdownInterval);
+        return;
+    }
+    const totalSeconds = Math.floor(diff / 1000);
+    countdown.value = {
+        days: Math.floor(totalSeconds / 86400),
+        hours: Math.floor((totalSeconds % 86400) / 3600),
+        minutes: Math.floor((totalSeconds % 3600) / 60),
+        seconds: totalSeconds % 60,
+    };
+};
+
+const countdownTargetLabel = countdownTarget.toLocaleString(undefined, {
+    weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit',
+});
+
+onMounted(() => {
+    updateCountdown();
+    countdownInterval = setInterval(updateCountdown, 1000);
+});
+
+onUnmounted(() => {
+    if (countdownInterval) clearInterval(countdownInterval);
+});
 </script>
 
 <template>
@@ -64,6 +109,22 @@ const enter = async () => {
         <div class="flex min-h-screen flex-col selection:bg-[#FF2D20] selection:text-white">
             <div class="relative w-full px-6 py-10">
                 <main class="max-w-6xl mx-auto">
+                    <!-- Countdown -->
+                    <div class="text-center mb-10 animate-fade-in-up">
+                        <p class="text-gray-400 text-lg uppercase tracking-[0.3em] mb-4">
+                            {{ countdownDone ? "It's time!" : 'Countdown to ' + countdownTargetLabel }}
+                        </p>
+                        <div class="flex justify-center gap-4 sm:gap-6 md:gap-8">
+                            <div v-for="unit in ['days', 'hours', 'minutes', 'seconds']" :key="unit"
+                                 class="bg-white/5 border border-white/10 rounded-3xl px-4 sm:px-6 md:px-8 py-4 md:py-6 min-w-[5rem] sm:min-w-[7rem] md:min-w-[9rem] shadow-2xl backdrop-blur">
+                                <div class="text-5xl sm:text-7xl md:text-8xl font-black tabular-nums leading-none bg-gradient-to-b from-yellow-300 via-orange-400 to-red-500 bg-clip-text text-transparent">
+                                    {{ pad(countdown[unit]) }}
+                                </div>
+                                <div class="text-gray-400 text-xs sm:text-sm md:text-base uppercase tracking-widest mt-2">{{ unit }}</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Header -->
                     <div class="text-center mb-10 animate-fade-in-up">
                         <h1 class="text-6xl font-bold mb-3 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
