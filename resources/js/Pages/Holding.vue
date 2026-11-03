@@ -110,17 +110,17 @@ onUnmounted(() => {
             <div class="relative w-full px-6 py-10">
                 <main class="max-w-6xl mx-auto">
                     <!-- Countdown -->
-                    <div class="text-center mb-10 animate-fade-in-up">
+                    <div class="text-center mb-8 sm:mb-10 animate-fade-in-up">
                         <!-- <p class="text-gray-400 text-lg uppercase tracking-[0.3em] mb-4">
                             {{ countdownDone ? "It's time!" : 'Countdown to ' + countdownTargetLabel }}
                         </p> -->
-                        <div class="flex justify-center gap-4 sm:gap-6 md:gap-8">
+                        <div class="grid grid-cols-4 gap-2 max-w-sm mx-auto sm:flex sm:justify-center sm:max-w-none sm:gap-6 md:gap-8">
                             <div v-for="unit in ['days', 'hours', 'minutes', 'seconds']" :key="unit"
-                                 class="bg-white/5 border border-white/10 rounded-3xl px-4 sm:px-6 md:px-8 py-4 md:py-6 min-w-[5rem] sm:min-w-[7rem] md:min-w-[9rem] shadow-2xl backdrop-blur">
-                                <div class="text-5xl sm:text-7xl md:text-8xl font-black tabular-nums leading-none bg-gradient-to-b from-yellow-300 via-orange-400 to-red-500 bg-clip-text text-transparent">
+                                 class="bg-white/5 border border-white/10 rounded-2xl sm:rounded-3xl px-1 sm:px-6 md:px-8 py-3 sm:py-4 md:py-6 sm:min-w-[7rem] md:min-w-[9rem] shadow-2xl backdrop-blur">
+                                <div class="text-4xl min-[360px]:text-5xl sm:text-7xl md:text-8xl font-black tabular-nums leading-none bg-gradient-to-b from-yellow-300 via-orange-400 to-red-500 bg-clip-text text-transparent">
                                     {{ pad(countdown[unit]) }}
                                 </div>
-                                <div class="text-gray-400 text-xs sm:text-sm md:text-base uppercase tracking-widest mt-2">{{ unit }}</div>
+                                <div class="text-gray-400 text-[10px] sm:text-sm md:text-base uppercase tracking-wider sm:tracking-widest mt-1 sm:mt-2">{{ unit }}</div>
                             </div>
                         </div>
                     </div>
