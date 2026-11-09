@@ -15,6 +15,7 @@ const props = defineProps({
     emojiCompleted: Boolean,
     flagCompleted: Boolean,
     flagsLearned: Number,
+    hunt: Object, // Scavenger hunt state: { status, total, ... }
     canAnswer: Boolean // Assume trivia has properties like question and answers
 });
 const credits = ref(props.credits); // Make credits reactive
@@ -93,13 +94,28 @@ const countdownTargetLabel = countdownTarget.toLocaleString(undefined, {
     weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit',
 });
 
+// Scavenger hunt: check regularly so the page unlocks the moment the hunt is turned on
+const hunt = ref(props.hunt);
+const huntOn = computed(() => hunt.value && hunt.value.status !== 'off');
+let huntInterval = null;
+
+const pollHunt = async () => {
+    try {
+        hunt.value = (await axios.get('/hunt/state')).data;
+    } catch (error) {
+        // Try again on the next tick
+    }
+};
+
 onMounted(() => {
     updateCountdown();
     countdownInterval = setInterval(updateCountdown, 1000);
+    huntInterval = setInterval(pollHunt, 10000);
 });
 
 onUnmounted(() => {
     if (countdownInterval) clearInterval(countdownInterval);
+    if (huntInterval) clearInterval(huntInterval);
 });
 </script>
 
@@ -109,8 +125,22 @@ onUnmounted(() => {
         <div class="flex min-h-screen flex-col selection:bg-[#FF2D20] selection:text-white">
             <div class="relative w-full px-6 py-10">
                 <main class="max-w-6xl mx-auto">
+                    <!-- Scavenger hunt is live -->
+                    <Link v-if="huntOn" :href="route('hunt')" class="block mb-8 sm:mb-10 animate-fade-in-up">
+                        <div class="bg-gradient-to-br from-rose-600 to-pink-800 rounded-3xl p-8 shadow-2xl border border-rose-400/40 text-center transform hover:scale-105 transition-all duration-300">
+                            <div class="text-6xl mb-3">🔍</div>
+                            <h2 class="text-4xl sm:text-5xl font-black mb-2">
+                                {{ hunt.status === 'finished' ? 'Hunt complete!' : 'The Scavenger Hunt is ON!' }}
+                            </h2>
+                            <p class="text-rose-100 text-xl mb-5">{{ hunt.total }} points so far</p>
+                            <span class="inline-block bg-yellow-400 text-gray-900 font-bold py-4 px-10 rounded-xl shadow-lg text-xl" :class="{ 'animate-pulse': hunt.status !== 'finished' }">
+                                {{ hunt.status === 'finished' ? 'See your score' : 'Tap to play →' }}
+                            </span>
+                        </div>
+                    </Link>
+
                     <!-- Countdown -->
-                    <div class="text-center mb-8 sm:mb-10 animate-fade-in-up">
+                    <div v-else class="text-center mb-8 sm:mb-10 animate-fade-in-up">
                         <!-- <p class="text-gray-400 text-lg uppercase tracking-[0.3em] mb-4">
                             {{ countdownDone ? "It's time!" : 'Countdown to ' + countdownTargetLabel }}
                         </p> -->
@@ -240,7 +270,25 @@ onUnmounted(() => {
                         <h2 class="text-3xl font-bold mb-6 text-center">Coming Soon</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Hunt Card -->
-                            <div class="bg-gradient-to-br from-gray-700 to-gray-900 rounded-2xl p-8 shadow-xl border border-gray-600/30 relative overflow-hidden opacity-75">
+                            <Link v-if="huntOn" :href="route('hunt')">
+                                <div class="bg-gradient-to-br from-rose-600 to-pink-800 rounded-2xl p-8 shadow-xl border border-rose-500/30 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                                    <div class="absolute top-0 right-0 text-9xl opacity-10 transform rotate-12">
+                                        🔍
+                                    </div>
+                                    <div class="relative z-10">
+                                        <div class="text-5xl mb-4">🔍</div>
+                                        <h3 class="text-3xl font-bold mb-2">Scavenger Hunt</h3>
+                                        <p class="text-rose-200 mb-4">{{ hunt.total }} points</p>
+                                        <span v-if="hunt.status !== 'finished'" class="inline-block bg-green-400 text-green-900 px-4 py-2 rounded-full text-sm font-bold animate-pulse">
+                                            Live now!
+                                        </span>
+                                        <span v-else class="inline-block bg-gray-600 text-gray-200 px-4 py-2 rounded-full text-sm font-bold">
+                                            ✓ Done
+                                        </span>
+                                    </div>
+                                </div>
+                            </Link>
+                            <div v-else class="bg-gradient-to-br from-gray-700 to-gray-900 rounded-2xl p-8 shadow-xl border border-gray-600/30 relative overflow-hidden opacity-75">
                                 <div class="absolute top-0 right-0 text-9xl opacity-5">
                                     🔍
                                 </div>

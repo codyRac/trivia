@@ -10,6 +10,7 @@ use App\Models\Trivia;
 use App\Models\EmojiMoviePuzzle;
 use App\Models\Flag;
 use App\Models\FlagDay;
+use App\Models\Hunt;
 use Carbon\Carbon;
 
 class WelcomeController extends Controller
@@ -67,6 +68,7 @@ class WelcomeController extends Controller
             'emojiCompleted' => $emojiCompleted,
             'flagCompleted' => $flagCompleted,
             'flagsLearned' => Flag::whereNotNull('learned_order')->count(),
+            'hunt' => Hunt::current()->state(),
         ]);
     }
 
