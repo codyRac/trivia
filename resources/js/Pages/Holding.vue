@@ -155,6 +155,13 @@ onUnmounted(() => {
                         </div>
                     </div>
 
+                    <!-- Message set in the admin area -->
+                    <div v-if="hunt?.message" class="max-w-2xl mx-auto mb-8 sm:mb-10 animate-fade-in-up">
+                        <div class="bg-white/5 border border-yellow-400/30 rounded-2xl px-6 py-5 text-center shadow-xl backdrop-blur">
+                            <p class="text-xl sm:text-2xl text-yellow-100 whitespace-pre-line leading-relaxed">{{ hunt.message }}</p>
+                        </div>
+                    </div>
+
                     <!-- Header -->
                     <div class="text-center mb-10 animate-fade-in-up">
                         <h1 class="text-6xl font-bold mb-3 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">

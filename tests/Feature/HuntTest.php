@@ -116,3 +116,17 @@ test('admin can run the hunt from the control page', function () {
     Livewire::test(HuntControl::class)->callAction('reset');
     expect(Hunt::current()->status())->toBe('off');
 });
+
+test('admin can set and clear the message shown under the countdown', function () {
+    $this->actingAs(User::factory()->create());
+
+    $this->getJson('/hunt/state')->assertJson(['message' => null]);
+    $this->get('/admin/hunt')->assertOk(); // also boots the admin panel for the Livewire tests
+
+    Livewire::test(HuntControl::class)->callAction('message', ['message' => '  Pack an overnight bag  ']);
+    $this->getJson('/hunt/state')->assertJson(['status' => 'off', 'message' => 'Pack an overnight bag']);
+    $this->get('/admin/hunt')->assertOk()->assertSee('Pack an overnight bag');
+
+    Livewire::test(HuntControl::class)->callAction('message', ['message' => '']);
+    expect(Hunt::current()->message)->toBeNull();
+});

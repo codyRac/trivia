@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Pages;
 
 use App\Models\Hunt;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 
@@ -24,6 +25,25 @@ class HuntControl extends Page
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('message')
+                ->label(fn () => filled(Hunt::current()->message) ? 'Edit message' : 'Add message')
+                ->icon('heroicon-o-chat-bubble-left-ellipsis')
+                ->color('gray')
+                ->modalHeading('Message under the countdown')
+                ->modalSubmitActionLabel('Save')
+                ->fillForm(fn () => ['message' => Hunt::current()->message])
+                ->schema([
+                    Textarea::make('message')
+                        ->hiddenLabel()
+                        ->rows(4)
+                        ->helperText('Shown on her home page under the countdown. Leave empty to show nothing.'),
+                ])
+                ->action(function (array $data) {
+                    $message = trim($data['message'] ?? '');
+                    Hunt::current()->update(['message' => $message === '' ? null : $message]);
+                    Notification::make()->title($message === '' ? 'Message removed' : 'Message saved')->success()->send();
+                }),
+
             Action::make('start')
                 ->label('Start the hunt')
                 ->icon('heroicon-o-play')

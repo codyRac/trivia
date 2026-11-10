@@ -110,6 +110,7 @@ class Hunt extends Model
 
         return [
             'status' => $this->status(),
+            'message' => filled($this->message) ? trim($this->message) : null,
             'intro' => $this->status() === 'off' ? null : $this->intro,
             'total' => $this->total(),
             'maxTotal' => $stops->count() * self::POINTS[0],

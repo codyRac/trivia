@@ -34,6 +34,14 @@
             </div>
         </x-filament::section>
 
+        <x-filament::section heading="Message under the countdown">
+            @if (filled($hunt->message))
+                <div style="white-space: pre-line;">{{ $hunt->message }}</div>
+            @else
+                <div style="opacity: 0.6;">None — nothing is shown. Use "Add message" above to set one.</div>
+            @endif
+        </x-filament::section>
+
         <x-filament::section heading="Stops">
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                 @foreach ($stops as $index => $stop)
