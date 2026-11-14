@@ -6,6 +6,7 @@ use App\Models\{Credit, Service, CreditUsed};
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
+use App\Support\Slack;
 
 class CreditController extends Controller
 {
@@ -48,6 +49,10 @@ class CreditController extends Controller
     $service->times_used++;
     $service->cost = ($service->cost*.25 )+ $service->cost;
     $service->update();
+
+    $owed = $service->times_used - $service->fulfilled;
+    Slack::send(":gift: *{$service->title}* was just redeemed for {$cost} credits.\n"
+        . "{$owed} of these still to do · {$userCredits->credits} credits left");
 
     return response()->json([
         'success' => true,
